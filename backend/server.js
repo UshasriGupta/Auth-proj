@@ -1,10 +1,20 @@
 const authRoutes = require("./routes/authRoutes");
 const connectDB = require("./config/db");
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5,
+  message: {
+    success: false,
+    message: "Too many requests. Try again after one minute."
+  }
+});
+app.use(limiter);
 
 // Middleware
 app.use(cors());
